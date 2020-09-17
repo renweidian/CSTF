@@ -31,19 +31,21 @@ MSI3=Unfold(MSI,size(MSI),3);
 
 
 %% inilization D1 D2 D3 C
- [m n]=size(MSI1);
-    D=MSI1;
-     params.Tdata = 2;            % Number of target sparse vectors
-      params.dictsize =par.W;      %   441;      % Number of dictionary elements (# columns of D)
-      params.iternum = 100;
-       params.DUC =1; 
+ %%[m n]=size(MSI1);
+   %% D=MSI1;
+    %% params.Tdata = 2;            % Number of target sparse vectors
+     %% params.dictsize =par.W;      %   441;      % Number of dictionary elements (# columns of D)
+      %%params.iternum = 100;
+      %% params.DUC =1; 
       
-       D1 = trainD(D,MSI1,[],[],params);
+       %%D1 = trainD(D,MSI1,[],[],params);
        
-        params.dictsize =par.H;
-        D2 = trainD(MSI2,MSI2,[],[],params);
+       %% params.dictsize =par.H;
+        %%D2 = trainD(MSI2,MSI2,[],[],params);
       
 %        D3= sisal(Y_h_bar,par.S, 'spherize', 'no','MM_ITERS',80, 'TAU', 0.006, 'verbose',0);
+[D1,~,~]=svds(MSI1*MSI1',par.W);
+[D2,~,~]=svds(MSI2*MSI2',par.H);
 D3=vca(Y_h_bar,par.S);
 
 
