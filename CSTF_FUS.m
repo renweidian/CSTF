@@ -68,7 +68,7 @@ D3=vca(Y_h_bar,par.S);
    
    
 
-for i=1:15
+for i=1:10
 
   %%  update D1
  CC=ttm(tensor(C),{D2,D_3},[2 3]);
