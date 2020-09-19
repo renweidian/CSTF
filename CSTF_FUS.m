@@ -31,29 +31,26 @@ MSI3=Unfold(MSI,size(MSI),3);
 
 
 %% inilization D1 D2 D3 C
- %%[m n]=size(MSI1);
-   %% D=MSI1;
-    %% params.Tdata = 2;            % Number of target sparse vectors
-     %% params.dictsize =par.W;      %   441;      % Number of dictionary elements (# columns of D)
-      %%params.iternum = 100;
-      %% params.DUC =1; 
+%  [m n]=size(MSI1);
+%     D=MSI1;
+%      params.Tdata = 2;            % Number of target sparse vectors
+%       params.dictsize =par.W;      %   441;      % Number of dictionary elements (# columns of D)
+%       params.iternum = 100;
+%        params.DUC =1; 
+%        D1 = trainD(D,MSI1,[],[],params);
+%         params.dictsize =par.H;
+%         D2 = trainD(MSI2,MSI2,[],[],params);
       
-       %%D1 = trainD(D,MSI1,[],[],params);
-       
-       %% params.dictsize =par.H;
-        %%D2 = trainD(MSI2,MSI2,[],[],params);
-      
-%        D3= sisal(Y_h_bar,par.S, 'spherize', 'no','MM_ITERS',80, 'TAU', 0.006, 'verbose',0);
+%        D3= sisal(Y_h_bar,par.S, 'spherize', 'no','MM_ITERS',80, 'TAU', 0.006, 'verbose',0)
 [D1,~,~]=svds(MSI1*MSI1',par.W);
 [D2,~,~]=svds(MSI2*MSI2',par.H);
 D3=vca(Y_h_bar,par.S);
 
 
-
-  D_1=ifft(fft(D1).*repmat(BW,[1 par.W]));
+  D_1=ifft(fft(D1).*repmat(BW,[1 size(D1,2)]));
   D_1=D_1(s0:downsampling_scale:end,:);
   
-   D_2=ifft(fft(D2).*repmat(BH,[1 par.H]));
+   D_2=ifft(fft(D2).*repmat(BH,[1 size(D2,2)]));
   D_2=D_2(s0:downsampling_scale:end,:);
   D_3=T*D3;
   
@@ -68,7 +65,7 @@ D3=vca(Y_h_bar,par.S);
    
    
 
-for i=1:10
+for i=1:3
 
   %%  update D1
  CC=ttm(tensor(C),{D2,D_3},[2 3]);
@@ -77,7 +74,7 @@ CC2=Unfold(double(CC),size(CC),1);
 CC4=Unfold(double(CC3),size(CC3),1);
   [ D1 ] = DIC_CG1( MSI1, D1, CC2,HSI1,downsampling_scale,s0,BW,CC4,mu);
 %     D_1=sample*D1;
- D_1=ifft(fft(D1).*repmat(BW,[1 par.W]));
+ D_1=ifft(fft(D1).*repmat(BW,[1 size(D1,2)]));
   D_1=D_1(s0:downsampling_scale:end,:);
   
     %%  update D2
@@ -86,7 +83,7 @@ CC2=Unfold(double(CC),size(CC),2);
   CC3=ttm(tensor(C),{D_1,D3},[1 3]);
 CC4=Unfold(double(CC3),size(CC3),2);
   [ D2 ] = DIC_CG1( MSI2, D2, CC2,HSI2,downsampling_scale,s0,BH,CC4,mu );
-    D_2=ifft(fft(D2).*repmat(BH,[1 par.H]));
+    D_2=ifft(fft(D2).*repmat(BH,[1 size(D2,2)]));
   D_2=D_2(s0:downsampling_scale:end,:);
 
    %%  update D3
@@ -117,7 +114,7 @@ CC4=Unfold(double(CC3),size(CC3),3);
 % b11=alternating_back_projection(Z1,X,Y,T,G);
 % b12=hyperConvert3D(b11,M,N,L);
 % 
- rmse1(i)=getrmse(double(im2uint8(S)),double(im2uint8(HR_HSI)))
+ rmse1(i)=getrmse(double((S)),double((HR_HSI)))
 %  rmse2(i)=getrmse(double(im2uint8(S)),double(im2uint8(b12)))
 
 end
